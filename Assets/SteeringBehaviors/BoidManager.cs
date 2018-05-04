@@ -120,6 +120,17 @@ public class BoidManager : MonoBehaviour
         }
     }
 
+    public void AssignSteeringTarget(Cell cell)
+    {
+        Vector3 targetPosition = new Vector3(cell.transform.position.x, 0.5f, cell.transform.position.z);
+
+        seekTarget.position = targetPosition;
+        seekTimer = 15f;
+
+        leaderSeekTarget.position = targetPosition;
+        leaderSeekTimer = 15f;
+    }
+
     void AssignPursuitTarget()
     {
         SimpleVehicleModel oldPursuitTarget = pursuer.movingTarget;

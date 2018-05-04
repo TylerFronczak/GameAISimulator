@@ -97,7 +97,8 @@ public class SimulationManager : MonoBehaviour
         agentManager.UpdateAllAgents_Movement();
     }
 
-    [SerializeField] bool isAcceptingPathfindingInput = true;
+    private bool isAcceptingPathfindingInput;
+    private bool isAcceptingSteeringInput;
 
     private void LoadMode(int mode)
     {
@@ -119,6 +120,7 @@ public class SimulationManager : MonoBehaviour
         else if (mode == 1)
         {
             simulationMode = SimulationMode.Steering;
+            isAcceptingSteeringInput = true;
             boidManager.gameObject.SetActive(true);
             boidManager.Initialize(cellGrid);
             //boidManager.ToggleBoids();
@@ -374,6 +376,13 @@ public class SimulationManager : MonoBehaviour
             else
             {
                 pathfindingAgent.movementController.PathToCell(cell);
+            }
+        }
+        else if (isAcceptingSteeringInput)
+        {
+            if (cell.Elevation == 0)
+            {
+                boidManager.AssignSteeringTarget(cell);
             }
         }
         else
