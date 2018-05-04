@@ -295,34 +295,11 @@ public class Pathfinder : MonoBehaviour
         return null;
     }
 
-    private int heuristicWeightIndex = 1;
     private float[] heuristicWeights = new float[] { 0f, 1f, 2f };
-
-    public void NextHeuristicWeight()
-    {
-        heuristicWeightIndex++;
-        if (heuristicWeightIndex >= heuristicWeights.Length)
-        {
-            heuristicWeightIndex = 0;
-        }
-
-        AdjustHeuristicWeight(heuristicWeights[heuristicWeightIndex]);
-    }
-    public void PreviousHeuristicWeight()
-    {
-        heuristicWeightIndex--;
-        if (heuristicWeightIndex < 0)
-        {
-            heuristicWeightIndex = heuristicWeights.Length - 1;
-        }
-
-        AdjustHeuristicWeight(heuristicWeights[heuristicWeightIndex]);
-    }
 
     /// <summary> 0=0%, 1=100%, 2=200% </summary>
     public void SelectHeuristicWeight(int index)
     {
-        heuristicWeightIndex = index;
         AdjustHeuristicWeight(heuristicWeights[index]);
     }
 
