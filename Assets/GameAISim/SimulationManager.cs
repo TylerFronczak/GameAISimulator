@@ -142,8 +142,9 @@ public class SimulationManager : MonoBehaviour
             agentManager.CreateAgents(50);
 
             ecosystemManagerButtonObject.SetActive(true);
-            TogglePanel_EcosystemManager(false);
+            TogglePanel_EcosystemManager(true);
             influenceMapManager.TogglePopulationMapOptions(false);
+            influenceMapManager.ModifyPopMap_InfluencePerSource(0.1f);
         }
     }
 
@@ -420,10 +421,6 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] GameObject boidManagerPanel;
     bool isBoidManagerPanelActive;
 
-    [SerializeField] GameObject perceptionManagerButtonObject;
-    [SerializeField] GameObject perceptionManagerPanel;
-    bool isPerceptionManagerPanelActive;
-
     [SerializeField] GameObject ecosystemManagerButtonObject;
     [SerializeField] GameObject ecosystemManagerPanel;
 
@@ -465,27 +462,6 @@ public class SimulationManager : MonoBehaviour
 
         boidManagerPanel.SetActive(isEnabled);
         isBoidManagerPanelActive = isEnabled;
-    }
-
-    public void TogglePanel_PerceptionManager()
-    {
-        isPerceptionManagerPanelActive = !isPerceptionManagerPanelActive;
-        TogglePanel_PerceptionManager(isPerceptionManagerPanelActive);
-    }
-    public void TogglePanel_PerceptionManager(bool isEnabled)
-    {
-        if (isEnabled)
-        {
-            CloseAllPanels();
-        }
-
-        if (pathfindingAgent != null)
-        {
-            isAcceptingPathfindingInput = isEnabled;
-        }
-
-        perceptionManagerPanel.SetActive(isEnabled);
-        isPerceptionManagerPanelActive = isEnabled;
     }
 
     private bool isEcosystemPanelEnabled;
@@ -555,13 +531,10 @@ public class SimulationManager : MonoBehaviour
         boidManagerPanel.SetActive(false);
         isBoidManagerPanelActive = false;
 
-        perceptionManagerPanel.SetActive(false);
-        isPerceptionManagerPanelActive = false;
+        ecosystemManagerPanel.SetActive(false);
 
         selectedAgentPanel.SetActive(false);
         isSelectedAgentPanelActive = false;
-
-        ecosystemManagerPanel.SetActive(false);
     }
     #endregion
 }
