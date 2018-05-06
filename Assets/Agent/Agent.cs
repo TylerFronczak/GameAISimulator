@@ -20,11 +20,6 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
 
     public string agentName;
 
-    private bool isAlert;
-    private float alertDuration = 0.25f;
-    private float alertTimer;
-    [SerializeField] Image alertIcon;
-
     private Vector3 uiOffsetY = new Vector3(0f, 0.5f, 0f);
 
     private float minutesPassedInSimulatedDaySinceLastUpdate;
@@ -36,6 +31,8 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public GameObject target;
 
     private BehaviorTree behaviorTree;
+
+    [SerializeField] Image selectionIndicator;
 
     public void Initialize(CellGrid cellGrid, BehaviorTree agentBehaviorTree, Pathfinder pathfinder)
     {
@@ -209,11 +206,11 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
 
     public void Select()
     {
-        
+        selectionIndicator.enabled = true;
     }
 
     public void Deselect()
     {
-
+        selectionIndicator.enabled = false;
     }
 }

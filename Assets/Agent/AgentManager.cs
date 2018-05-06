@@ -10,8 +10,9 @@ using BehaviorTreeSystem;
 public class AgentManager : MonoBehaviour
 {
     public bool isSelectionEnabled;
-
     public Agent selectedAgent;
+    private float agentSelectionDistanceThreshold = 1f;
+
     public List<Agent> agents;
     private ObjectPool<Agent> pooledAgents;
 
@@ -20,7 +21,7 @@ public class AgentManager : MonoBehaviour
     private CellGrid cellGrid;
     private Pathfinder pathfinder;
 
-    private GameObject agentsGameObject;
+    [SerializeField] GameObject agentsGameObject;
     private int numAgentsCreated;
 
     public void Initialize(CellGrid cellGrid, Pathfinder pathfinder)
@@ -28,7 +29,6 @@ public class AgentManager : MonoBehaviour
         this.cellGrid = cellGrid;
         this.pathfinder = pathfinder;
 
-        agentsGameObject = new GameObject("Agents");
         pooledAgents = new ObjectPool<Agent>();
         pooledAgents.SetDelegate(CreateAgent);
     }
@@ -125,31 +125,70 @@ public class AgentManager : MonoBehaviour
         }
     }
 
+    private void SelectAgent(Agent agent)
+    {
+        selectedAgent.Deselect();
+        selectedAgent = agent;
+        selectedAgent.Select();
+        EventManager.TriggerEvent(CustomEventType.AgentSelection, selectedAgent);
+    }
+
     #region EventSystem
     private void AddListeners()
     {
-        EventManager.StartListening(CustomEventType.AgentDeath, AgentDeath);
-        EventManager.StartListening(CustomEventType.AgentSelection, AgentSelection);
+        EventManager.StartListening(CustomEventType.AgentDeath, OnAgentDeath);
+        EventManager.StartListening(CustomEventType.ClickedCell, OnClickedCell);
     }
     private void RemoveListeners()
     {
-        EventManager.StopListening(CustomEventType.AgentDeath, AgentDeath);
-        EventManager.StopListening(CustomEventType.AgentSelection, AgentSelection);
+        EventManager.StopListening(CustomEventType.AgentDeath, OnAgentDeath);
+        EventManager.StopListening(CustomEventType.ClickedCell, OnClickedCell);
     }
 
-    private void AgentDeath<Object>(Object agentObject)
+    private void OnAgentDeath<Object>(Object agentObject)
     {
         Agent agent = agentObject as Agent;
         agents.Remove(agent);
         pooledAgents.Add(agent);
     }
 
-    private void AgentSelection<Object>(Object agentObject)
+    private void OnClickedCell<Object>(Object cellObject)
     {
-        Agent agent = agentObject as Agent;
-        selectedAgent.Deselect();
-        selectedAgent = agent;
-        selectedAgent.Select();
+        Cell cell = cellObject as Cell;
+
+        if (isSelectionEnabled)
+        {
+            Agent agent = cell.obstacle as Agent;
+
+            if (agent != null)
+            {
+                SelectAgent(agent);
+            }
+            else
+            {
+                float closestDistance = Mathf.Infinity;
+                Agent closestAgent = null;
+                foreach (Cell neighbor in cell.Neighbors)
+                {
+                    agent = neighbor.obstacle as Agent;
+                    if (agent != null)
+                    {
+                        float distance = Vector3.Distance(cell.transform.position, agent.transform.position);
+                        if (distance < closestDistance)
+                        {
+                            closestDistance = distance;
+                            closestAgent = agent;
+                        }
+                    }
+
+                }
+
+                if (closestAgent != null)
+                {
+                    SelectAgent(closestAgent);
+                }
+            }
+        }
     }
 
     private void OnEnable()

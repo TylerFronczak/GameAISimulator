@@ -140,6 +140,7 @@ public class SimulationManager : MonoBehaviour
             biome.StartSpawningPlants(0.25f);
 
             agentManager.CreateAgents(50);
+            agentManager.isSelectionEnabled = true;
 
             ecosystemManagerButtonObject.SetActive(true);
             TogglePanel_EcosystemManager(true);
@@ -357,10 +358,12 @@ public class SimulationManager : MonoBehaviour
     private void AddListeners()
     {
         EventManager.StartListening(CustomEventType.ClickedCell, ClickedCell);
+        EventManager.StartListening(CustomEventType.AgentSelection, OnAgentSelection);
     }
     private void RemoveListeners()
     {
         EventManager.StopListening(CustomEventType.ClickedCell, ClickedCell);
+        EventManager.StopListening(CustomEventType.AgentSelection, OnAgentSelection);
     }
 
     void ClickedCell<Object>(Object clickedCell)
@@ -397,6 +400,12 @@ public class SimulationManager : MonoBehaviour
                 Debug.Log("There is no grid object");
             }
         }
+    }
+
+    void OnAgentSelection<Object>(Object agentObject)
+    {
+        selectedAgent = agentObject as Agent;
+        UpdateAgentText();
     }
 
     private void OnEnable()

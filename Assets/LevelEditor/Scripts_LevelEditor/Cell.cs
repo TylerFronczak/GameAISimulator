@@ -22,6 +22,7 @@ public class Cell : MonoBehaviour
 
     public Node node;
     Cell[] neighbors;
+    public Cell[] Neighbors { get { return neighbors; } }
 
     public int regionID = -1;
 
