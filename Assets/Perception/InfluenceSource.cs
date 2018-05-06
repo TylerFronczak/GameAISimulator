@@ -10,12 +10,12 @@ public class InfluenceSource : MonoBehaviour
     public InfluenceType influenceType;
     public float influence;
 
-    private void Start()
+    private void OnEnable()
     {
         EventManager.TriggerEvent(CustomEventType.InfluenceSource_Created, this);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         EventManager.TriggerEvent(CustomEventType.InfluenceSource_Destroyed, this);
     }

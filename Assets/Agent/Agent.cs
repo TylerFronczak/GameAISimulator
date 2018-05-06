@@ -16,6 +16,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public SimpleVehicleModel simpleVehicleModel;
     public FieldOfView fieldOfView;
     public AgentData data;
+    public InfluenceSource influenceSource;
 
     public string agentName;
 
@@ -185,6 +186,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public void Death()
     {
         isDead = true;
+        influenceSource.enabled = false;
         EventManager.TriggerEvent(CustomEventType.AgentDeath, this);
     }
     #endregion
@@ -200,6 +202,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public void OnPoolRemoval()
     {
         isDead = false;
+        influenceSource.enabled = true;
         gameObject.SetActive(true);
     }
     #endregion

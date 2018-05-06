@@ -23,7 +23,6 @@ public class InfluenceMap
 
     public float[] InfluencesValues { get; private set; }
 
-    public float tempInfluencePerSource = 0.25f;
     public float momentum; // value between ------------
     public float decay; // aka falloff constant, newInfluence = sourceInfluence / (decay * distance + 1)
     float minInfluence = 0f;
@@ -68,7 +67,7 @@ public class InfluenceMap
         {
             int sourceRegionID = regionManager.GetRegionID(influenceSources[i].transform.position);
 
-            tempInfluenceValues[sourceRegionID] += tempInfluencePerSource;
+            tempInfluenceValues[sourceRegionID] += influenceSources[i].influence;
 
             for (int regionID = 0; regionID < Regions.Count; regionID++)
             {
@@ -81,7 +80,7 @@ public class InfluenceMap
 
                 if (pathDistanceBetweenRegions != Mathf.Infinity)
                 {
-                    tempInfluenceValues[regionID] += tempInfluencePerSource / (decay * pathDistanceBetweenRegions + 1);
+                    tempInfluenceValues[regionID] += influenceSources[i].influence / (decay * pathDistanceBetweenRegions + 1);
                 }
                 else
                 {

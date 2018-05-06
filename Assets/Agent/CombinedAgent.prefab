@@ -141,7 +141,6 @@ GameObject:
   - component: {fileID: 114026988020357810}
   - component: {fileID: 114766167952111966}
   - component: {fileID: 114191498046427854}
-  - component: {fileID: 114337599734560374}
   - component: {fileID: 114337791080103200}
   - component: {fileID: 114366287115156546}
   - component: {fileID: 54724640250187580}
@@ -1249,6 +1248,7 @@ MonoBehaviour:
   simpleVehicleModel: {fileID: 114337791080103200}
   fieldOfView: {fileID: 114703484036017328}
   data: {fileID: 114689486532591684}
+  influenceSource: {fileID: 114766167952111966}
   agentName: 
   alertIcon: {fileID: 0}
   movementMode: 0
@@ -1306,18 +1306,6 @@ MonoBehaviour:
     m_Bits: 256
   noCollisionMaterial: {fileID: 2100000, guid: 488fdc2c010050043b271d5275716888, type: 2}
   collisionMaterial: {fileID: 2100000, guid: 6501fdc0b27a51a44a9e49280bad52d4, type: 2}
-  directionLineRenderer: {fileID: 0}
---- !u!114 &114337599734560374
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1358790700568252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd746509bb4e3d64e832799e6408239c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114337791080103200
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1449,7 +1437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   influenceType: 0
-  influence: 0.25
+  influence: 0.1
 --- !u!114 &114769647042863870
 MonoBehaviour:
   m_ObjectHideFlags: 1

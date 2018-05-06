@@ -39,6 +39,8 @@ public class InfluenceMapManager : MonoBehaviour
         CalculateRegionDistances();
 
         propagationTimer = secondsTillPropagation;
+
+        AddListeners();
     }
 
     void CalculateRegionDistances()
@@ -93,9 +95,6 @@ public class InfluenceMapManager : MonoBehaviour
 
         return regionDistances[key];
     }
-
-    [SerializeField] int regionOne;
-    [SerializeField] int regionTwo;
 
     float secondsTillPropagation = 0.5f;
     float propagationTimer;
@@ -158,12 +157,6 @@ public class InfluenceMapManager : MonoBehaviour
 
     #region TempVisualziationPurposes
 
-    public void ModifyPopMap_InfluencePerSource(float influence)
-    {
-        influence = Mathf.Clamp(influence, 0f, 1f);
-        PopulationMap.tempInfluencePerSource = influence;
-    }
-
     public void ModifyPopMap_Momentum(float value)
     {
         value = Mathf.Clamp(value, 0f, 1f);
@@ -220,10 +213,6 @@ public class InfluenceMapManager : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        AddListeners();
-    }
     private void OnDisable()
     {
         RemoveListeners();

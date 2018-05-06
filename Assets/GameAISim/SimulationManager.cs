@@ -144,7 +144,6 @@ public class SimulationManager : MonoBehaviour
             ecosystemManagerButtonObject.SetActive(true);
             TogglePanel_EcosystemManager(true);
             influenceMapManager.TogglePopulationMapOptions(false);
-            influenceMapManager.ModifyPopMap_InfluencePerSource(0.1f);
         }
     }
 
