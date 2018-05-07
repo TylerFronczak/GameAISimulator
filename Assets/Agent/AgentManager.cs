@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GameAISimulator.Enums;
 using BehaviorTreeSystem;
+using TMPro;
 
 public class AgentManager : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class AgentManager : MonoBehaviour
 
     [SerializeField] GameObject agentsGameObject;
     private int numAgentsCreated;
+
+    [SerializeField] TextMeshProUGUI agentCountText;
 
     public void Initialize(CellGrid cellGrid, Pathfinder pathfinder)
     {
@@ -87,7 +90,11 @@ public class AgentManager : MonoBehaviour
             {
                 isAbleToPlace = newAgent.PlaceOnGrid(cellGrid.GetRandomCell(0));
             }
+
+            agents.Add(newAgent);
         }
+
+        agentCountText.text = agents.Count.ToString();
     }
     private Agent CreateAgent()
     {
@@ -99,9 +106,22 @@ public class AgentManager : MonoBehaviour
 
         BehaviorTree behaviorTree = GetBaseBehaviorTree(agent);
         agent.Initialize(cellGrid, behaviorTree, pathfinder);
-        agents.Add(agent);
 
         return agent;
+    }
+
+    public void DestroyAgents(int numAgentsToDelete)
+    {
+        int agentsRemaining = agents.Count;
+
+        while(agentsRemaining > 0 && numAgentsToDelete > 0)
+        {
+            agents[agentsRemaining - 1].Death();
+            agentsRemaining--;
+            numAgentsToDelete--;
+        }
+
+        agentCountText.text = agentsRemaining.ToString();
     }
 
     public void Update()
@@ -150,6 +170,7 @@ public class AgentManager : MonoBehaviour
         Agent agent = agentObject as Agent;
         agents.Remove(agent);
         pooledAgents.Add(agent);
+        agentCountText.text = agents.Count.ToString();
     }
 
     private void OnClickedCell<Object>(Object cellObject)
@@ -180,7 +201,6 @@ public class AgentManager : MonoBehaviour
                             closestAgent = agent;
                         }
                     }
-
                 }
 
                 if (closestAgent != null)
