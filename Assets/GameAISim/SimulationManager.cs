@@ -136,8 +136,9 @@ public class SimulationManager : MonoBehaviour
         {
             simulationMode = SimulationMode.Ecosystem;
 
-            biome.CreatePlants(100);
-            biome.StartSpawningPlants(0.25f);
+            biome.SpawnPlants(100);
+            biome.isSpawningNewPlants = true;
+            biome.AdjustPlantSpawnRate(0f);
 
             agentManager.CreateAgents(5);
             agentManager.isSelectionEnabled = true;

@@ -19,7 +19,7 @@ public class Ecosystem : MonoBehaviour
 
     CellGrid cellGrid;
 
-    bool isSpawningNewPlants;
+    public bool isSpawningNewPlants;
     float simDaysTillNewPlant;
     float newPlantTimer;
 
@@ -48,29 +48,45 @@ public class Ecosystem : MonoBehaviour
             newPlantTimer += simDaysPassedSinceLastUpdate;
             if (newPlantTimer >= simDaysTillNewPlant)
             {
-                Food plant = pooledPlants.GetPoolObject();
-                plant.SetEnergy(kgPerPlant);
-                plants.Add(plant);
-                PlaceFoodOnRandomCell(plant);
-                plant.gameObject.SetActive(true);
+                SpawnPlant();
                 newPlantTimer = 0;
             }
         }
     }
 
-    public void StartSpawningPlants(float simDaysTillNewPlant)
+    float maxPlantSpawnRate = 24f;
+
+    /// <summary> 0 = Min/Slow, 1 = Max/Fast</summary>
+    public void AdjustPlantSpawnRate(float spawnRate)
     {
-        isSpawningNewPlants = true;
-        this.simDaysTillNewPlant = simDaysTillNewPlant;
+        simDaysTillNewPlant = Mathf.Clamp(1 / spawnRate, 0, maxPlantSpawnRate);
     }
 
-    public void CreatePlants(int plantCount)
+    public void SpawnPlants(int plantCount)
     {
         for (int i = 0; i < plantCount; i++)
         {
-            PlaceFoodOnRandomCell(CreatePlant());
+            SpawnPlant();
         }
     }
+    private void SpawnPlant()
+    {
+        Food plant = pooledPlants.GetPoolObject();
+        plant.SetEnergy(kgPerPlant);
+        PlaceFoodOnRandomCell(plant);
+        plant.gameObject.SetActive(true);
+        plants.Add(plant);
+    }
+
+    private void SpawnMeat(Cell cell)
+    {
+        Food meat = pooledMeats.GetPoolObject();
+        meat.SetEnergy(kgPerMeat);
+        meat.PlaceOnGrid(cell);
+        meat.gameObject.SetActive(true);
+        meats.Add(meat);
+    }
+
     private Food CreatePlant()
     {
         Food plant = Instantiate(plantPrefab).GetComponent<Food>();
@@ -107,23 +123,21 @@ public class Ecosystem : MonoBehaviour
     #region EventSystem
     private void AddListeners()
     {
-        EventManager.StartListening(CustomEventType.AgentDeath, AgentDeath);
-        EventManager.StartListening(CustomEventType.Food_Depleted, FoodDepleted);
+        EventManager.StartListening(CustomEventType.AgentDeath, OnAgentDeath);
+        EventManager.StartListening(CustomEventType.Food_Depleted, OnFoodDepleted);
     }
     private void RemoveListeners()
     {
-        EventManager.StopListening(CustomEventType.AgentDeath, AgentDeath);
-        EventManager.StopListening(CustomEventType.Food_Depleted, FoodDepleted);
+        EventManager.StopListening(CustomEventType.AgentDeath, OnAgentDeath);
+        EventManager.StopListening(CustomEventType.Food_Depleted, OnFoodDepleted);
     }
 
-    private void AgentDeath<Object>(Object agentObject)
+    private void OnAgentDeath<Object>(Object agentObject)
     {
         Agent agent = agentObject as Agent;
-        Food meat = pooledMeats.GetPoolObject();
-        meat.PlaceOnGrid(agent.Cell);
-        meat.SetEnergy(kgPerMeat);
+        SpawnMeat(agent.Cell);
     }
-    private void FoodDepleted<Object>(Object foodObject)
+    private void OnFoodDepleted<Object>(Object foodObject)
     {
         Food food = foodObject as Food;
         if (food.FoodType == FoodType.Plant)
