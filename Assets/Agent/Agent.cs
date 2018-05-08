@@ -213,10 +213,12 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public void Select()
     {
         selectionIndicator.enabled = true;
+        fieldOfView.IsVisualizingFOV = true;
     }
 
     public void Deselect()
     {
         selectionIndicator.enabled = false;
+        fieldOfView.IsVisualizingFOV = false;
     }
 }

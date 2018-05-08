@@ -210,7 +210,6 @@ public class FieldOfView : MonoBehaviour
 
             if (Vector3.Angle(transform.forward, vectorToTarget.normalized) < viewAngle * 0.5f)
             {
-                VisibleTargets.Add(target);
                 if (!Physics.Raycast(transform.position, vectorToTarget.normalized, vectorToTarget.magnitude, obstacleMask, QueryTriggerInteraction.Collide))
                 {
                     VisibleTargets.Add(target);

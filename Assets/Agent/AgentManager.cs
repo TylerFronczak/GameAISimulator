@@ -11,7 +11,7 @@ using TMPro;
 public class AgentManager : MonoBehaviour
 {
     public bool isSelectionEnabled;
-    public Agent selectedAgent;
+    private Agent selectedAgent;
     private float agentSelectionDistanceThreshold = 1f;
 
     public List<Agent> agents;
@@ -147,7 +147,11 @@ public class AgentManager : MonoBehaviour
 
     private void SelectAgent(Agent agent)
     {
-        selectedAgent.Deselect();
+        if (selectedAgent != null)
+        {
+            selectedAgent.Deselect();
+        }
+
         selectedAgent = agent;
         selectedAgent.Select();
         EventManager.TriggerEvent(CustomEventType.AgentSelection, selectedAgent);
@@ -171,6 +175,11 @@ public class AgentManager : MonoBehaviour
         agents.Remove(agent);
         pooledAgents.Add(agent);
         agentCountText.text = agents.Count.ToString();
+
+        if (agent == selectedAgent)
+        {
+            agent.Deselect();
+        }
     }
 
     private void OnClickedCell<Object>(Object cellObject)

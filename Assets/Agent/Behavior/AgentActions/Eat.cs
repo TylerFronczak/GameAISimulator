@@ -54,6 +54,8 @@ public class Eat : AgentAction
 
         if (targetFood == null || targetFood.isDepleted)
         {
+            agent.target = null;
+
             if (hasEatenFood)
             {
                 return BehaviorStatus.Success;
@@ -69,6 +71,7 @@ public class Eat : AgentAction
             // and then reused by the pooling system before the agent is able to recognize the situation.
             if (targetFood.Cell != targetCell)
             {
+                agent.target = null;
                 return BehaviorStatus.Failure;
             }
 

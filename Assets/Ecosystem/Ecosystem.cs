@@ -83,6 +83,7 @@ public class Ecosystem : MonoBehaviour
     {
         Food meat = pooledMeats.GetPoolObject();
         meat.SetEnergy(kgPerMeat);
+        meat.isDepleted = false;
         meat.PlaceOnGrid(cell);
         meat.gameObject.SetActive(true);
         meats.Add(meat);
