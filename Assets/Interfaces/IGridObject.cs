@@ -12,6 +12,7 @@ public interface IGridObject
     bool PlaceOnGrid(int row, int column);
     bool PlaceOnGrid(Cell cell);
     void RemoveFromGrid();
+    void Replace();
     void OnDestroy(); // Should call RemoveFromGrid()
 }
 

@@ -93,14 +93,17 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
         }
         set
         {
-            if (cell != null && cell.Feature != null)
+            if (cell != null)
             {
-                //cell.Feature = null;
-                Debug.LogWarning("When assigning Cell, the prexisting feature has been overridden.");
+                cell.Feature = null;
             }
 
             cell = value;
-            cell.Feature = this;
+
+            if (cell != null)
+            {
+                cell.Feature = this;
+            }
         }
     }
 
@@ -112,12 +115,6 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
     }
     public bool PlaceOnGrid(Cell possibleCell)
     {
-        if (possibleCell.Feature != null)
-        {
-            Debug.LogWarning("Food cannot be placed on a cell that already has a feature.");
-            return false;
-        }
-
         Cell = possibleCell;
         transform.position = cell.transform.position;
         return true;
@@ -125,10 +122,12 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
 
     public void RemoveFromGrid()
     {
-        if (cell != null)
-        {
-            cell.Feature = null;
-        }
+        Cell = null;
+    }
+
+    public void Replace()
+    {
+        Deplete();
     }
 
     public void OnDestroy()
@@ -147,13 +146,13 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
     #region IPoolObject
     public void ResetForPool()
     {
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
 
     public void OnPoolRemoval()
     {
-        isDepleted = false;
-        gameObject.SetActive(true);
+        //isDepleted = false;
+        //gameObject.SetActive(true);
     }
     #endregion
 }

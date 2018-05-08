@@ -73,6 +73,7 @@ public class Ecosystem : MonoBehaviour
     {
         Food plant = pooledPlants.GetPoolObject();
         plant.SetEnergy(kgPerPlant);
+        plant.isDepleted = false;
         PlaceFoodOnRandomCell(plant);
         plant.gameObject.SetActive(true);
         plants.Add(plant);
@@ -116,6 +117,10 @@ public class Ecosystem : MonoBehaviour
             {
                 isLocationValid = true;
                 food.PlaceOnGrid(possibleCell);
+            }
+            else
+            {
+                Debug.Log("Cannot place plant on existing feature");
             }
         }
     }

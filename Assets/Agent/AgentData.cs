@@ -38,6 +38,8 @@ public class AgentData : MonoBehaviour
 
     // Height in meters, used to compute BMI
     public float Height { get; private set; }
+
+    public float EatRange { get; private set; }
     #endregion
 
     #region Fighting
@@ -59,5 +61,6 @@ public class AgentData : MonoBehaviour
         AttackSpeed = 0.1f;
         AttackDamage = 100f;
         AttackRange = 1f;
+        EatRange = 1.1f;
     }
 }

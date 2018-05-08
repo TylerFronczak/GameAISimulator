@@ -77,6 +77,11 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
 
     public void UpdateAgent_Movement()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         if (movementMode == MovementMode.Pathing)
         {
             movementController.FixedUpdate_MovementController();
@@ -91,16 +96,10 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
 
     public void UpdateAgent_Behavior()
     {
-        //if (isAlert)
-        //{
-        //    alertIcon.transform.position = transform.position + uiOffsetY;
-        //    alertTimer += SimulationData.realSecondsBetweenAgentBehaviorUpdates;
-        //    if (alertTimer >= alertDuration)
-        //    {
-        //        isAlert = false;
-        //        alertIcon.enabled = false;
-        //    }
-        //}
+        if (isDead)
+        {
+            return;
+        }
 
         stats.ageInDays += SimulationData.simDaysBetweenBehaviorUpdates;
 
@@ -164,6 +163,11 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
         }
     }
 
+    public void Replace()
+    {
+        
+    }
+
     public void OnDestroy()
     {
         RemoveFromGrid();
@@ -183,7 +187,9 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public void Death()
     {
         isDead = true;
+        gameObject.SetActive(false);
         influenceSource.enabled = false;
+        target = null;
         EventManager.TriggerEvent(CustomEventType.AgentDeath, this);
     }
     #endregion
@@ -193,7 +199,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     #region IPoolObject
     public void ResetForPool()
     {
-        gameObject.SetActive(false);
+        
     }
 
     public void OnPoolRemoval()

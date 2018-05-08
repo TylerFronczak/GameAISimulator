@@ -33,14 +33,22 @@ public class Cell : MonoBehaviour
         get { return feature; }
         set
         {
-            //if (feature != null)
-            //{
-            //    Debug.LogWarning("The prexisting cell feature was overridden and destroyed through the object's RemoveFromGrid()");
-            //}
+            if (feature != null && value != null)
+            {
+                feature.Replace();
+                Debug.LogWarning("The preexisting cell feature was replaced.");
+            }
 
             feature = value;
+
+            if (feature != null)
+            {
+                hasFeature = true;
+            }
         }
     }
+
+    public bool hasFeature;
 
     public void DeregisterAgent(Agent agent)
     {

@@ -13,6 +13,8 @@ public class Eat : AgentAction
 
     bool hasEatenFood;
 
+    Cell targetCell;
+
     public Eat(Agent agentPerformingAction) : base(agentPerformingAction)
     {
 
@@ -28,6 +30,19 @@ public class Eat : AgentAction
         else
         {
             targetFood = agent.target.GetComponentInParent<Food>();
+            if (targetFood == null)
+            {
+                Debug.LogWarning("Target food is null.");
+                return;
+            }
+            else if (targetFood.isDepleted)
+            {
+                targetFood = null;
+                Debug.LogWarning("Food was depleted before the agent was able to start eating.");
+                return;
+            }
+
+            targetCell = targetFood.Cell;
             hasEatenFood = false;
             timeEating = 0f;
         }
@@ -50,6 +65,13 @@ public class Eat : AgentAction
         }
         else
         {
+            // Must check whether food has moved because the agent's food source could become depleted
+            // and then reused by the pooling system before the agent is able to recognize the situation.
+            if (targetFood.Cell != targetCell)
+            {
+                return BehaviorStatus.Failure;
+            }
+
             float foodEnergy = targetFood.DrainEnergy(agent.stats.metabolicRate, 1f, SimulationData.simDaysBetweenBehaviorUpdates);
             agent.stats.ModifyHunger(-foodEnergy);
             hasEatenFood = true;
