@@ -18,9 +18,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
     public AgentData data;
     public InfluenceSource influenceSource;
 
-    public string agentName;
-
-    private Vector3 uiOffsetY = new Vector3(0f, 0.5f, 0f);
+    public string id;
 
     private float minutesPassedInSimulatedDaySinceLastUpdate;
 
@@ -106,7 +104,7 @@ public class Agent : MonoBehaviour, IGridObject, IDamageable, IPoolObject
         totalEnergyExpenditurePerMinute = stats.ComputeTotalEnergyExpenditurePerMinute();
         float energyBurnedSinceLastUpdate = totalEnergyExpenditurePerMinute * SimulationData.minutesPassedInSimDayBetweenBehaviorUpdates;
         //Debug.Log(agentName + " has burned " + totalEnergyExpenditurePerMinute + " in a minute, for a total of " + energyBurnedSinceLastUpdate + " since last update, which was " + SimulationData.minutesPassedInSimDayBetweenBehaviorUpdates + "minutes in the simulation");
-        stats.ModifyHunger(totalEnergyExpenditurePerMinute * SimulationData.minutesPassedInSimDayBetweenBehaviorUpdates);
+        stats.ModifyHunger(energyBurnedSinceLastUpdate);
         
         behaviorTree.Tick();
     }

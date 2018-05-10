@@ -93,7 +93,8 @@ public enum CustomEventType
     Food_Created,
     Food_Depleted,
     InfluenceSource_Created,
-    InfluenceSource_Destroyed
+    InfluenceSource_Destroyed,
+    SceneExit
 }
 
 [System.Serializable]

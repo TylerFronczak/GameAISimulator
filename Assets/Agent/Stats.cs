@@ -82,7 +82,7 @@ public class Stats : MonoBehaviour
 
     public string GetFormattedHunger()//(bool isPercentage)
     {
-        return string.Format("Hunger: {0:#.00} kcal", currentHunger);
+        return string.Format("Hunger: {0:#0.} kcal", currentHunger);
         //return GetFormattedStat(currentHunger, maxHunger, isPercentage);
     }
     #endregion

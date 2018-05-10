@@ -106,11 +106,13 @@ public class PauseMenuManager : MonoBehaviour
 
     public void LoadScene_MainMenu()
     {
+        EventManager.TriggerEvent(CustomEventType.SceneExit, null);
         SceneManager.LoadScene(mainMenuSceneIndex, LoadSceneMode.Single);
     }
 
     public void LoadScene_NewSimulation()
     {
+        EventManager.TriggerEvent(CustomEventType.SceneExit, null);
         SceneManager.LoadScene(newSimulationSceneIndex, LoadSceneMode.Single);
     }
 

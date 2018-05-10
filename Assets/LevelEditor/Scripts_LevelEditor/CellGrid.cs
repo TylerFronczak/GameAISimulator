@@ -102,7 +102,7 @@ public class CellGrid : MonoBehaviour
         int originalIndex = randomIndex;
         Cell cell = Cells[randomIndex];
 
-        while (Cells[randomIndex].Elevation != elevation)
+        while (cell.Elevation != elevation)
         {
             randomIndex++;
             if (randomIndex == originalIndex)
@@ -115,9 +115,11 @@ public class CellGrid : MonoBehaviour
             {
                 randomIndex = 0;
             }
+
+            cell = Cells[randomIndex];
         }
 
-        return Cells[randomIndex];
+        return cell;
     }
 
     public Cell GetRandomCell_ObstacleFree(int elevation)
@@ -126,7 +128,7 @@ public class CellGrid : MonoBehaviour
         int originalIndex = randomIndex;
         Cell cell = Cells[randomIndex];
 
-        while (Cells[randomIndex].Elevation != elevation || Cells[randomIndex].obstacle != null)
+        while (cell.Elevation != elevation || cell.obstacle != null)
         {
             randomIndex++;
             if (randomIndex == originalIndex)
@@ -139,9 +141,11 @@ public class CellGrid : MonoBehaviour
             {
                 randomIndex = 0;
             }
+
+            cell = Cells[randomIndex];
         }
 
-        return Cells[randomIndex];
+        return cell;
     }
 
     public Coordinates FromPosition(Vector3 position)

@@ -9,7 +9,6 @@ using GameAISimulator;
 public class Eat : AgentAction
 {
     Food targetFood;
-    float timeEating;
 
     bool hasEatenFood;
 
@@ -44,7 +43,6 @@ public class Eat : AgentAction
 
             targetCell = targetFood.Cell;
             hasEatenFood = false;
-            timeEating = 0f;
         }
     }
 

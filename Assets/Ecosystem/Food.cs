@@ -18,7 +18,6 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
 {
     float kcalEnergyCurrent;
     public float KcalEnergyCurrent { get { return kcalEnergyCurrent; } }
-    float kcalEnergyMax;
 
     float kgMass;
     public FoodType FoodType { get; private set; }
@@ -46,8 +45,6 @@ public class Food : MonoBehaviour, IGridObject, ITarget, IPoolObject
                 kcalEnergyCurrent = kgMass * 1000f;
                 break;
         }
-
-        kcalEnergyMax = kcalEnergyCurrent;
     }
 
     // (5) Horse can spend 5-10 hours a day grazing and (6) a cow can spend 8 hours grazing(6).

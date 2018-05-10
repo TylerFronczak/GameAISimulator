@@ -26,7 +26,6 @@ public class BoidManager : MonoBehaviour
     float arrivalTimer;
     [SerializeField] float timeTillArrivalTargetChange = 10f;
     [SerializeField] List<Vector3> arrivalPositions;
-    [SerializeField] GameObject obstacleToAvoid;
 
     bool isPursuitMode;
     SimpleVehicleModel pursuer;
@@ -328,7 +327,6 @@ public class BoidManager : MonoBehaviour
 
         isArrivalAndAvoidanceMode = false;
         arrivalTarget.gameObject.SetActive(false);
-        obstacleToAvoid.SetActive(false);
 
         isLeaderFollowingMode = false;
         leaderSeekTarget.gameObject.SetActive(false);

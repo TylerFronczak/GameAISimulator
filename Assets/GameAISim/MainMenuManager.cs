@@ -18,12 +18,15 @@ public class MainMenuManager : MonoBehaviour
 
     public void Button_Load_NewSimulation()
     {
+        EventManager.TriggerEvent(CustomEventType.SceneExit, null);
         SceneManager.LoadScene(sceneBuildIndex, LoadSceneMode.Single);
     }
 
     public void Button_Load_SavedSimulation(string fileName)
     {
         IntentManager.Instance.CreateIntent_LoadTerrain(fileName);
+
+        EventManager.TriggerEvent(CustomEventType.SceneExit, null);
         SceneManager.LoadScene(sceneBuildIndex, LoadSceneMode.Single);
     }
 

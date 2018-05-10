@@ -133,6 +133,17 @@ public class MovementController : MonoBehaviour
         PathToNode(possibleGoalNode);
     }
 
+    /// <summary> Recalculates path to the most recent goal node. </summary>
+    public void RecalculatePath()
+    {
+        if (prevGoalNode != null)
+        {
+            Node goalNode = prevGoalNode;
+            prevGoalNode = null;
+            PathToNode(goalNode);
+        }
+    }
+
     private void PathToNode(Node possibleGoalNode)
     {
         if (possibleGoalNode != prevGoalNode) // If path has not already been calculated.

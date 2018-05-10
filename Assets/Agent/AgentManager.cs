@@ -12,7 +12,6 @@ public class AgentManager : MonoBehaviour
 {
     public bool isSelectionEnabled;
     private Agent selectedAgent;
-    private float agentSelectionDistanceThreshold = 1f;
 
     public List<Agent> agents;
     private ObjectPool<Agent> pooledAgents;
@@ -100,9 +99,9 @@ public class AgentManager : MonoBehaviour
     {
         Agent agent = Instantiate(agentPrefab).GetComponent<Agent>();
         numAgentsCreated++;
-        agent.agentName = string.Format("Agent #{0}", numAgentsCreated.ToString());
+        agent.id = string.Format("Agent #{0}", numAgentsCreated.ToString());
         agent.transform.parent = agentsGameObject.transform;
-        agent.gameObject.name = agent.agentName;
+        agent.gameObject.name = agent.id;
 
         BehaviorTree behaviorTree = GetBaseBehaviorTree(agent);
         agent.Initialize(cellGrid, behaviorTree, pathfinder);
@@ -137,16 +136,15 @@ public class AgentManager : MonoBehaviour
         agents[randomInt].Death();
     }
 
-    private void OnApplicationQuit()
-    {
-        foreach (Agent agent in agents)
-        {
-            Destroy(agent);
-        }
-    }
-
     private void SelectAgent(Agent agent)
     {
+        if (selectedAgent == agent)
+        {
+            //selectedAgent = null;
+            //EventManager.TriggerEvent(CustomEventType.AgentSelection, null);
+            return;
+        }
+
         if (selectedAgent != null)
         {
             selectedAgent.Deselect();
@@ -157,16 +155,30 @@ public class AgentManager : MonoBehaviour
         EventManager.TriggerEvent(CustomEventType.AgentSelection, selectedAgent);
     }
 
+    /// <summary> Should be called before exiting scene or quitting application. </summary>
+    private void DestroyAgents()
+    {
+        foreach (Agent agent in agents)
+        {
+            // Ensures objects are cleaned up properly when switching scenes because Agent.cs
+            // and the assocaited InfleunceSource.cs would otherwise have the potential to 
+            // trigger events after the event manager is already destroyed.
+            Destroy(agent.gameObject);
+        }
+    }
+
     #region EventSystem
     private void AddListeners()
     {
         EventManager.StartListening(CustomEventType.AgentDeath, OnAgentDeath);
         EventManager.StartListening(CustomEventType.ClickedCell, OnClickedCell);
+        EventManager.StartListening(CustomEventType.SceneExit, OnSceneExit);
     }
     private void RemoveListeners()
     {
         EventManager.StopListening(CustomEventType.AgentDeath, OnAgentDeath);
         EventManager.StopListening(CustomEventType.ClickedCell, OnClickedCell);
+        EventManager.StopListening(CustomEventType.SceneExit, OnSceneExit);
     }
 
     private void OnAgentDeath<Object>(Object agentObject)
@@ -179,6 +191,8 @@ public class AgentManager : MonoBehaviour
         if (agent == selectedAgent)
         {
             agent.Deselect();
+            selectedAgent = null;
+            EventManager.TriggerEvent(CustomEventType.AgentSelection, null);
         }
     }
 
@@ -220,6 +234,11 @@ public class AgentManager : MonoBehaviour
         }
     }
 
+    private void OnSceneExit<Object>(Object nullObject)
+    {
+        DestroyAgents();
+    }
+
     private void OnEnable()
     {
         AddListeners();
@@ -229,6 +248,11 @@ public class AgentManager : MonoBehaviour
         RemoveListeners();
     }
     #endregion
+
+    private void OnApplicationQuit()
+    {
+        DestroyAgents();
+    }
 
     public void ToggleFOV(bool isEnabled)
     {

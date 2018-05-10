@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using GameAISimulator;
 using GameAISimulator.Enums;
+using TMPro;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -146,6 +146,7 @@ public class SimulationManager : MonoBehaviour
             ecosystemManagerButtonObject.SetActive(true);
             TogglePanel_EcosystemManager(true);
             influenceMapManager.TogglePopulationMapOptions(false);
+            selectedAgentButtonObject.SetActive(true);
         }
     }
 
@@ -433,7 +434,9 @@ public class SimulationManager : MonoBehaviour
     [SerializeField] GameObject ecosystemManagerButtonObject;
     [SerializeField] GameObject ecosystemManagerPanel;
 
+    [SerializeField] GameObject selectedAgentButtonObject;
     [SerializeField] GameObject selectedAgentPanel;
+
     bool isSelectedAgentPanelActive;
 
     public void TogglePanel_Pathfinder()
@@ -490,13 +493,15 @@ public class SimulationManager : MonoBehaviour
         ecosystemManagerPanel.SetActive(isEcosystemPanelEnabled);
     }
 
-    [SerializeField] Text healthText;
-    [SerializeField] Text ageText;
-    [SerializeField] Text heightText;
-    [SerializeField] Text hungerText;
-    [SerializeField] Text weightText;
-    [SerializeField] Text bmiText;
-    [SerializeField] Text teeText;
+    //[SerializeField] Text healthText;
+    //[SerializeField] Text heightText;
+    //[SerializeField] Text teeText;
+
+    [SerializeField] TextMeshProUGUI idText;
+    [SerializeField] TextMeshProUGUI ageText;
+    [SerializeField] TextMeshProUGUI hungerText;
+    [SerializeField] TextMeshProUGUI weightText;
+    [SerializeField] TextMeshProUGUI bmiText;
 
     public void TogglePanel_SelectedAgent()
     {
@@ -511,11 +516,6 @@ public class SimulationManager : MonoBehaviour
             UpdateAgentText();
         }
 
-        if (pathfindingAgent != null)
-        {
-            isAcceptingPathfindingInput = isEnabled;
-        }
-
         selectedAgentPanel.SetActive(isEnabled);
         isSelectedAgentPanelActive = isEnabled;
     }
@@ -523,13 +523,26 @@ public class SimulationManager : MonoBehaviour
 
     void UpdateAgentText()
     {
-        healthText.text = selectedAgent.stats.GetFormattedHealth(false);
-        weightText.text = selectedAgent.stats.GetFormattedWeight();
-        bmiText.text = selectedAgent.stats.GetFormattedBMI();
-        hungerText.text = selectedAgent.stats.GetFormattedHunger();
-        ageText.text = selectedAgent.stats.GetFormattedAge();
-        heightText.text = selectedAgent.stats.GetFormattedHeight();
-        teeText.text = string.Format("TEE: {0:#.00} kcal/min", selectedAgent.totalEnergyExpenditurePerMinute);
+        //healthText.text = selectedAgent.stats.GetFormattedHealth(false);
+        //heightText.text = selectedAgent.stats.GetFormattedHeight();
+        //teeText.text = string.Format("TEE: {0:#.00} kcal/min", selectedAgent.totalEnergyExpenditurePerMinute);
+
+        if (selectedAgent != null)
+        {
+            idText.text = selectedAgent.id;
+            ageText.text = selectedAgent.stats.GetFormattedAge();
+            weightText.text = selectedAgent.stats.GetFormattedWeight();
+            hungerText.text = selectedAgent.stats.GetFormattedHunger();
+            bmiText.text = selectedAgent.stats.GetFormattedBMI();
+        }
+        else
+        {
+            idText.text = "ID: None";
+            ageText.text = "Age: NA";
+            weightText.text = "Weight: NA";
+            hungerText.text = "Hunger: NA";
+            bmiText.text = "BMI: NA";
+        }
     }
 
     public void CloseAllPanels()
